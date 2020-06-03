@@ -1,33 +1,66 @@
-from flask import Flask, render_template, request
-from forms import registration_form
-
-
-app = Flask(__name__)  # '__main__'
-
+from cryptic import app,db
+from flask import render_template,redirect,url_for,request,flash,abort
+from flask_login import login_user,login_required,logout_user
+from cryptic.models import User
+from cryptic.forms import LoginForm,RegistrationForm
+from werkzeug.security import generate_password_hash,check_password_hash
 
 @app.route('/')
 def home():
-    return render_template("HomePage.html")
+    return render_template('HomePage.html')
 
-@app.route('/Register')
-def register():
-    return render_template("Register.html")
+@app.route('/welcome')
+@login_required
+def welcome_user():
+    return render_template('login_popup.html')
 
-@app.route('/Login')
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("Login.html")
+    mess = 'Please fill form to login'
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        try:
+            if user.check_password(form.password.data) and user is not None:
+                #Log in the user
 
+                login_user(user)
+                mess = 'Logged in successfully.'
 
+                # If a user was trying to visit a page that requires a login
+                # flask saves that URL as 'next'.
+                next = request.args.get('next')
 
-@app.route('/logged_in')
-def login_popup():
-    username = request.args.get('username')
-    password = request.args.get('password')
-    return render_template("login_popup.html", username=username, password=password)
+                # So let's now check if that next exists, otherwise we'll go to
+                # the welcome page.
+                if next == None or not next[0]=='/':
+                    next = url_for('welcome_user')
+                return redirect(next)
+        except AttributeError:
+            mess = 'No such login.Pls register to make an account '
+    return render_template('Login.html', form=form)
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error_404.html'), 404
+@app.route('/register',methods=['GET','POST'])
+def register():
+    form = RegistrationForm()
+    email = form.email.data
+    username = form.username.data
+    password = form.password.data
+    fname = form.fname.data
+    lname = form.lname.data
+
+    if form.validate_on_submit():
+        user = User(email,username,password,1,fname,lname)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('Register.html',form = form)
 
 
 if __name__ == '__main__':

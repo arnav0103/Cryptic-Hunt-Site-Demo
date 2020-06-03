@@ -16,14 +16,18 @@
 
     <nav class="site-header sticky-top py-1">
         <div class="container d-flex flex-column flex-md-row justify-content-between">
-            <a class="py-2 d-non d-md-inline-block" href="{{ url_for('home')}}">Home</a>
-            <a class="py-2 d-none d-md-inline-block" href="{{ url_for('register')}}">Register</a>
-            <a class="py-2 d-none d-md-inline-block" href="{{ url_for('login')}}">Login</a>
+
+            {%if current_user.is_authenticated%}
             <a class="py-2 d-none d-md-inline-block" href="#">Play</a>
             <a class="py-2 d-none d-md-inline-block" href="#">Hints</a>
             <a class="py-2 d-none d-md-inline-block" href="#">Leader Board</a>
+            <a class="py-2 d-none d-md-inline-block" href="{{url_for('logout')}}">Logout</a>
+            {%else%}
+            <a class="py-2 d-non d-md-inline-block" href="{{ url_for('home')}}">Home</a>
+            <a class="py-2 d-none d-md-inline-block" href="{{ url_for('register')}}">Register</a>
+            <a class="py-2 d-none d-md-inline-block" href="{{ url_for('login')}}">Login</a>
+            {%endif%}
             <a class="py-2 d-none d-md-inline-block" href="#">Contact Us</a>
-            <a class="py-2 d-none d-md-inline-block" href="#">Logout</a>
         </div>
     </nav>
 

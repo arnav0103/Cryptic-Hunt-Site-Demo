@@ -2,40 +2,28 @@
 
 {% block content %}
 
-    <div class="container">
-             <div id="register-row" class="row justify-content-center align-items-center">
-                    <div id="register-column" class="col-md-6">
-                        <div id="register-box" class="col-md-12">
-                            <form id="register-form" class="form" action="{{url_for('register_popup')}}" method="post">
-                                <br>
-                                <h3 class="text-center text-info">Register</h3>
-                                <div class="form-group">
-                                    <label for="fname" class="text-info">First name</label><br>
-                                    <input type="text" name="fname" id="register_fname" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="lname" class="text-info">Last name</label><br>
-                                    <input type="text" name="lname" id="register_lname" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="mail" class="text-info">E-mail</label><br>
-                                    <input type="text" name="mail" id="register_mail" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pass" class="text-info">Password</label><br>
-                                    <input type="password" name="pass" id="register_username" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="re_pass" class="text-info">Re-enter Password:</label><br>
-                                    <input type="password" name="re_pass" id="register_password_again" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <input type="Submit" name="Submit" class="btn btn-info btn-md" value="Submit">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+<div class="container">
+  <div class="jumbotron">
+    <form  method="post">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="fade close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{mess}}
+      </div>
+      <div class="form-group">
+        {{form.hidden_tag()}}
+        {{form.fname.label}}<br>{{form.fname()}}<br>
+        {{form.lname.label}}<br>{{form.lname()}}<br>
+        {{form.email.label}}<br>{{form.email()}}<br>
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        {{form.username.label}}<br>{{form.username()}}<br>
+        {{form.password.label}}<br>{{form.password()}}<br>
+        {{form.pass_confirm.label}}<br>{{form.pass_confirm()}}
+        {{form.submit}}
+      </div>
+    </form>
+
 
 {% endblock %}

@@ -4,7 +4,7 @@ from flask_login import login_user,login_required,logout_user,current_user
 from cryptic.models import User
 from cryptic.forms import LoginForm,RegistrationForm,PlayForm
 from werkzeug.security import generate_password_hash,check_password_hash
-
+username =''
 @app.route('/')
 def home():
     return render_template('HomePage.html')
@@ -26,12 +26,14 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+
         try:
             if user.check_password(form.password.data) and user is not None:
                 #Log in the user
 
                 login_user(user)
                 mess = 'Logged in successfully.'
+                current_user = user
 
                 # If a user was trying to visit a page that requires a login
                 # flask saves that URL as 'next'.
@@ -62,8 +64,10 @@ def register():
         return redirect(url_for('login'))
     return render_template('Register.html',form = form)
 @app.route('/play',methods=['GET','POST'])
+@login_required
 def play():
     form = PlayForm()
+    use=username
     question = current_user.question
     user = User.query.get(current_user.id)
     answer = form.answer.data
@@ -75,7 +79,8 @@ def play():
                     db.session.add(user)
                     db.session.commit()
                     return render_template('Correct.html')
-    return render_template('play.html',form=form)
+    return render_template('play.html',form=form,use=use)
+
 
 
 if __name__ == '__main__':

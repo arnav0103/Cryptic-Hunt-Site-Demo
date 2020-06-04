@@ -1,8 +1,8 @@
-"""second try
+"""last try
 
-Revision ID: 660975f41ef5
+Revision ID: 5475f6780a1b
 Revises: 
-Create Date: 2020-06-03 15:03:33.044220
+Create Date: 2020-06-04 19:45:52.142061
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '660975f41ef5'
+revision = '5475f6780a1b'
 down_revision = None
 branch_labels = None
 depends_on = None

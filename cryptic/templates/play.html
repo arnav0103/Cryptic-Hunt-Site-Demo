@@ -1,6 +1,21 @@
 {%extends "base.html"%}
 
 {%block content%}
+<div class="container">
+  <div class="jumbotron">
+    <form method="post">
+      {%if current_user.question==1%}
+      <h3>Please write lo {{current_user.question}}</h3>
+      {%else%}
+      <h3>Wrong Code</h3>
+      {%endif%}
+      {{form.hidden_tag()}}
+      {{form.answer.label}}<br>
+      {{form.answer()}}
+
+    </form>
+  </div>
 
 
+</div>
 {%endblock%}

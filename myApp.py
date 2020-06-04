@@ -1,8 +1,8 @@
 from cryptic import app,db
 from flask import render_template,redirect,url_for,request,flash,abort
-from flask_login import login_user,login_required,logout_user
+from flask_login import login_user,login_required,logout_user,current_user
 from cryptic.models import User
-from cryptic.forms import LoginForm,RegistrationForm
+from cryptic.forms import LoginForm,RegistrationForm,PlayForm
 from werkzeug.security import generate_password_hash,check_password_hash
 
 @app.route('/')
@@ -44,7 +44,7 @@ def login():
                 return redirect(next)
         except AttributeError:
             mess = 'No such login.Pls register to make an account '
-    return render_template('Login.html', form=form)
+    return render_template('Login.html', form=form,mess=mess)
 
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -61,6 +61,21 @@ def register():
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('Register.html',form = form)
+@app.route('/play',methods=['GET','POST'])
+def play():
+    form = PlayForm()
+    question = current_user.question
+    user = User.query.get(current_user.id)
+    answer = form.answer.data
+    if question == 1:
+        if form.validate_on_submit:
+            if answer is not None:
+                if answer.lower() == 'lo':
+                    user.question += 1
+                    db.session.add(user)
+                    db.session.commit()
+                    return render_template('Correct.html')
+    return render_template('play.html',form=form)
 
 
 if __name__ == '__main__':

@@ -17,3 +17,6 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(),EqualTo('pass_confirm',message='Passwords must match')])
     pass_confirm = PasswordField('confirm password',validators=[DataRequired()])
     submit = SubmitField('Register')
+
+class PlayForm(FlaskForm):
+    answer = StringField(label='solve the question',validators=[DataRequired()])

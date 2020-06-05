@@ -86,6 +86,15 @@ def play():
                 return render_template('Wrong.html')
     return render_template('play.html',form=form,use=use)
 
+@app.route('/leaderboard')
+def leaderboard():
+    all_users = User.query.all()
+    n=len(all_users)
+    rank = []
+    for users in all_users:
+        rank.append(n)
+        n-=1
+    return render_template('leaderboard.html',all_users = all_users,rank=rank)
 
 
 if __name__ == '__main__':

@@ -14,7 +14,11 @@
     {%for user in all_users%}
     <tr>
       <th scope="row">{{rank.pop()}}</th>
+      {%if user == current_user%}
+      <td>{{user.username}}(You)</td>
+      {%else%}
       <td>{{user.username}}</td>
+      {%endif%}
       <td>{{user.question}}</td>
     </tr>
     {%endfor%}

@@ -64,7 +64,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
-    except:
+    except :
         mess = 'username already been used'
     return render_template('Register.html',form = form,mess=mess)
 @app.route('/play',methods=['GET','POST'])

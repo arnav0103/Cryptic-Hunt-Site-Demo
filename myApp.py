@@ -88,7 +88,7 @@ def play():
 
 @app.route('/leaderboard')
 def leaderboard():
-    all_users = User.query.all()
+    all_users = User.query.order_by(User.question.desc()).all()
     n=len(all_users)
     rank = []
     for users in all_users:

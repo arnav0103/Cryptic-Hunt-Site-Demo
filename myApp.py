@@ -50,19 +50,23 @@ def login():
 
 @app.route('/register',methods=['GET','POST'])
 def register():
-    form = RegistrationForm()
-    email = form.email.data
-    username = form.username.data
-    password = form.password.data
-    fname = form.fname.data
-    lname = form.lname.data
+    mess = 'Register to play the most exciting cryptic hunts ever'
+    try:
+        form = RegistrationForm()
+        email = form.email.data
+        username = form.username.data
+        password = form.password.data
+        fname = form.fname.data
+        lname = form.lname.data
 
-    if form.validate_on_submit():
-        user = User(email,username,password,1,fname,lname)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('login'))
-    return render_template('Register.html',form = form)
+        if form.validate_on_submit():
+            user = User(email,username,password,1,fname,lname)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('login'))
+    except:
+        mess = 'username already been used'
+    return render_template('Register.html',form = form,mess=mess)
 @app.route('/play',methods=['GET','POST'])
 @login_required
 def play():
@@ -79,6 +83,7 @@ def play():
                     db.session.add(user)
                     db.session.commit()
                     return render_template('Correct.html')
+                return render_template('Wrong.html')
     return render_template('play.html',form=form,use=use)
 
 

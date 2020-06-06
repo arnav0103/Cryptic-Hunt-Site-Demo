@@ -3,6 +3,7 @@ from flask import render_template,redirect,url_for,request,flash,abort
 from flask_login import login_user,login_required,logout_user,current_user
 from cryptic.models import User
 from cryptic.forms import LoginForm,RegistrationForm,PlayForm
+from sqlalchemy import desc
 from werkzeug.security import generate_password_hash,check_password_hash
 username =''
 @app.route('/')
@@ -58,9 +59,10 @@ def register():
         password = form.password.data
         fname = form.fname.data
         lname = form.lname.data
+        school_name = form.school_name.data
 
         if form.validate_on_submit():
-            user = User(email,username,password,1,fname,lname)
+            user = User(email,username,password,1,fname,lname, school_name)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -89,12 +91,18 @@ def play():
 @app.route('/leaderboard')
 def leaderboard():
     all_users = User.query.order_by(User.question.desc()).all()
-    n=len(all_users)
+    n = len(all_users)
     rank = []
     for users in all_users:
         rank.append(n)
-        n-=1
-    return render_template('leaderboard.html',all_users = all_users,rank=rank)
+        n -= 1
+    return render_template('leaderboard.html',all_users=all_users,rank=rank)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+  return render_template('error_404.html'), 404
+
 
 
 if __name__ == '__main__':

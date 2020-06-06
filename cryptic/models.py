@@ -16,15 +16,17 @@ class User(db.Model,UserMixin):
     lname = db.Column(db.String)
     email = db.Column(db.String(64),index=True)
     username = db.Column(db.String(64),unique=True,index=True)
+    school_name = db.Column(db.String)
     password_hash = db.Column(db.String)
     question = db.Column(db.Integer)
-    def __init__(self,email,username,password,question,fname,lname):
+    def __init__(self,email,username,password,question,fname,lname, school_name):
         self.fname=fname
         self.lname=lname
         self.email = email
         self.username = username
         self.password_hash = generate_password_hash(password)
         self.question = question
+        self.school_name = school_name
 
     def check_password(self,password):
         return check_password_hash(self.password_hash,password)

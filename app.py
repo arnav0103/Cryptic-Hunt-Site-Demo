@@ -6,6 +6,10 @@ from cryptic.forms import LoginForm,RegistrationForm,PlayForm
 from sqlalchemy import desc
 from werkzeug.security import generate_password_hash,check_password_hash
 username =''
+from flask_pymongo import PyMongo
+from pymongo import MongoClient
+app.config["MONGO_URI"] = "mongodb+srv://Arnav:arnavgupta0103@cluster0.ntgb4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+mongo = PyMongo(app)
 @app.route('/')
 def home():
     return render_template('HomePage.html')
@@ -59,10 +63,10 @@ def register():
         password = form.password.data
         fname = form.fname.data
         lname = form.lname.data
-        school_name = form.school_name.data
+        classe = form.classe.data
 
         if form.validate_on_submit():
-            user = User(email,username,password,1,fname,lname, school_name)
+            user = User(email,username,password,1,fname,lname, classe)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -76,17 +80,18 @@ def play():
     use=username
     question = current_user.question
     user = User.query.get(current_user.id)
-    answer = form.answer.data
-    if question == 1:
-        if form.validate_on_submit:
-            if answer is not None:
-                if answer.lower() == 'lo':
-                    user.question += 1
-                    db.session.add(user)
-                    db.session.commit()
-                    return render_template('Correct.html')
-                return render_template('Wrong.html')
-    return render_template('play.html',form=form,use=use)
+    user_collection = mongo.db.Questions
+    s = user_collection.find_one({'question_number':user.question})
+    answers = form.answer.data
+    if form.validate_on_submit:
+        if answers is not None:
+            if answers.lower() == s['q_answer']:
+                user.question += 1
+                db.session.add(user)
+                db.session.commit()
+                return render_template('Correct.html')
+            return render_template('Wrong.html')
+    return render_template('play.html',form=form,use=use,question=s['question'])
 
 @app.route('/leaderboard')
 def leaderboard():

@@ -5,8 +5,8 @@
   <div class="jumbotron">
     <h1>{{use}}</h1>
     <form method="post">
-      {%if current_user.question==1%}
-      <h3>Please write lo</h3>
+      {%if current_user.question%}
+      <h3>{{question}}</h3>
       {%else%}
       <h3>Question 2not yet uploaded</h3>
       {%endif%}

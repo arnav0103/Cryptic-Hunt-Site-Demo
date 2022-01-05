@@ -38,18 +38,15 @@ def login():
                 login_user(user)
                 mess = 'Logged in successfully.'
                 current_user = user
-
-                # If a user was trying to visit a page that requires a login
-                # flask saves that URL as 'next'.
                 next = request.args.get('next')
-
-                # So let's now check if that next exists, otherwise we'll go to
-                # the welcome page.
                 if next == None or not next[0]=='/':
                     next = url_for('welcome_user')
                 return redirect(next)
+            else:
+                mess = "Wrong Password"
         except AttributeError:
             mess = 'No such login.Pls register to make an account '
+    print(mess)
     return render_template('Login.html', form=form,mess=mess)
 
 @app.route('/register',methods=['GET','POST'])
@@ -70,7 +67,7 @@ def register():
             db.session.commit()
             return redirect(url_for('login'))
     except :
-        mess = 'username already been used'
+        mess = 'username or email already been used'
     return render_template('Register.html',form = form,mess=mess)
 @app.route('/play',methods=['GET','POST'])
 @login_required
@@ -78,12 +75,13 @@ def play():
     if current_user.restricted=="Yes":
         abort(403)
     form = PlayForm()
-    use=username
+    # use=current_user.question_number
     question = current_user.question
     user = User.query.get(current_user.id)
     user_collection = mongo.db.Questions
     s = user_collection.find_one({'question_number':user.question})
     answers = form.answer.data
+    mess = ""
     if form.validate_on_submit:
         if answers is not None:
             log = Logs(answer = answers.lower(),answer_time = datetime.now(),question = user.question,userid = current_user.id)
@@ -94,9 +92,10 @@ def play():
                 user.answer_time= datetime.now()
                 db.session.add(user)
                 db.session.commit()
-                return render_template('Correct.html')
-            return render_template('Wrong.html')
-    return render_template('play.html',form=form,use=use,question=s['question'])
+                mess = "correct"
+            else:
+                mess = "wrong"
+    return render_template('play.html',form=form,use=question,question=s['question'],mess=mess)
 
 @app.route('/leaderboard')
 @login_required

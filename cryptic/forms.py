@@ -21,3 +21,4 @@ class RegistrationForm(FlaskForm):
 
 class PlayForm(FlaskForm):
     answer = StringField(label='solve the question',validators=[DataRequired()])
+    submit = SubmitField('Submit')

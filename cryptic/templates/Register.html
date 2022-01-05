@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<div class="container">
+<!-- <div class="container">
   <div class="jumbotron">
     <form  method="post">
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,17 +12,90 @@
         </button>
         {{mess}}
       </div>
-      <div class="form-group">
+      <div class="form-group"> -->
+
+        <main class="reg-hero">
+          <h1 class="heading-1">Register</h1>
+  
+        <form method="post" class="reg-form">
         {{form.hidden_tag()}}
-        {{form.fname.label}}<br>{{form.fname()}}<br>
-        {{form.lname.label}}<br>{{form.lname()}}<br>
+        <div class="input-wrapper">
+          <label for="fname" class="form-label">{{form.fname.label}}</label>
+          {{form.fname(class="form-input exceptions")}}
+        </div>
+
+        {%if form.fname.errors%} {%for error in
+          form.fname.errors%}
+        <small>{{error}}</small>
+        {%endfor%} {%endif%}
+
+        <div class="input-wrapper">
+          <label for="lname" class="form-label">{{form.lname.label}}</label>
+          {{form.lname(class="form-input exceptions")}}
+        </div>
+
+        {%if form.lname.errors%} {%for error in
+          form.lname.errors%}
+        <small>{{error}}</small>
+        {%endfor%} {%endif%}
+
+        <div class="input-wrapper">
+          <label for="email" class="form-label">{{form.email.label}}</label>
+          {{form.email(class="form-input exceptions")}}
+        </div>
+
+        {%if form.email.errors%} {%for error in form.email.errors%}
+        <small>{{error}}</small>
+        {%endfor%} {%endif%}
+
+        <div class="input-wrapper">
+          <label for="classe" class="form-label">{{form.classe.label}}</label>
+          {{form.classe(class="form-input exceptions")}}
+        </div>
+
+        {%if form.classe.errors%} {%for error in
+          form.classe.errors%}
+        <small>{{error}}</small>
+        {%endfor%} {%endif%}
+
+        <div class="input-wrapper">
+          <label for="username" class="form-label">{{form.username.label}}</label>
+          {{form.username(class="form-input exceptions")}}
+        </div>
+
+        {%if form.username.errors%} {%for error in form.username.errors%}
+        <small>{{error}}</small>
+        {%endfor%} {%endif%}
+
+        <div class="input-wrapper">
+          <label for="password" class="form-label">{{form.password.label}}</label>
+          {{form.password(class="form-input exceptions")}}
+        </div>
+
+        {%if form.password.errors%} {%for error in
+          form.password.errors%}
+        <small>{{error}}</small>
+        {%endfor%} {%endif%}
+
+        <div class="input-wrapper">
+          <label for="pass_confirm" class="form-label">{{form.pass_confirm.label}}</label>
+          {{form.pass_confirm(class="form-input exceptions")}}
+        </div>
+
+        {%if form.pass_confirm.errors%} {%for error in form.pass_confirm.errors%}
+        <small class="last-caption">{{error}}</small>
+        {%endfor%} {%endif%}
+
+        {{form.submit(class="btn")}}  
+        <!-- {{form.fname.label}}<br>{{form.fname()}}<br>
+        {{form.lname.label}}<br>{{form.lname()}}<br>  
         {{form.email.label}}<br>{{form.email()}}<br>
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         {{form.classe.label}}<br>{{form.classe()}}<br>
         {{form.username.label}}<br>{{form.username()}}<br>
         {{form.password.label}}<br>{{form.password()}}<br>
         {{form.pass_confirm.label}}<br>{{form.pass_confirm()}}
-        {{form.submit}}
+        {{form.submit}} -->
       </div>
     </form>
 

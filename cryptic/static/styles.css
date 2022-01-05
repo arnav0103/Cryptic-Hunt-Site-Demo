@@ -208,6 +208,7 @@ body {
     border-radius: 7px;
     font-weight: 600;
     transition: all .2s ease-in-out;
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 56.25em) {
@@ -280,7 +281,7 @@ body {
     display: block;
     font-size: 1.6rem;
     color: rgba(255, 255, 255, .8);
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
 }
 
 @media only screen and (max-width: 37.5em) {
@@ -576,10 +577,65 @@ background-color: transparent;
 
 .answer {
     width: 45%;
+    margin-bottom: 2rem;
 }
 
 @media only screen and (max-width: 56.25em) {
     .answer {
         width: 85%;
     }
+}
+
+small {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: rgb(255, 83, 83, .8);
+}
+
+.table {
+    background-color: var(--color-grey-dark-2);
+    padding: 2rem;
+    width: 70%;
+    margin: auto;
+    border-radius: 15px;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+@media only screen and (max-width: 56.25em) {
+    .table {
+        width: 80%;
+    }
+}
+
+th {
+    font-size: 2rem;
+    color: var(--color-primary-light);
+}
+
+@media only screen and (max-width: 56.25em) {
+    th {
+        font-size: 1.4rem;
+    }
+}
+
+td {
+    font-size: 1.4rem;
+    padding: 1.5rem 1rem;
+}
+
+@media only screen and (max-width: 56.25em) {
+    td {
+        font-size: 1rem;
+    }
+}
+
+td a {
+    color: var(--color-grey-light-2);
+    transition: all .2s ease-in-out;
+}
+
+td a:hover {
+    color:var(--color-primary);
 }

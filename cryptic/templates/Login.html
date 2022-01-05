@@ -9,10 +9,15 @@
                 <label for="uname" class="form-label">{{form.username.label}}</label>
                 {{form.username(class="form-input exceptions")}}
             </div>
+
+            {%if form.username.errors%} {%for error in form.username.errors%}
+                <small>{{error}}</small>
+            {%endfor%} {%endif%}
+
             <div class="input-wrapper">
                 <label for="pass" class="form-label">{{form.password.label}}</label>
                 {{form.password(class="form-input exceptions")}}
-                {{mess}}
+                <small>{{mess}}</small>
             </div>
             {{form.submit(class="btn")}}
         </form>

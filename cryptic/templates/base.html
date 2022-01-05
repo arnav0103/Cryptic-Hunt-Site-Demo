@@ -19,20 +19,30 @@
             {%if current_user.is_authenticated%}
             <div class="nav-links nav-main">
               <a class="nav-link" href="{{url_for('play')}}">Play</a>
-              <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
               <a class="nav-link" href="{{url_for('leaderboard')}}">Leader Board</a>
+              <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
               <div class="toggleNav"></div>
             </div>
-            {%else%}
-            <a class="btn" href="{{ url_for('register')}}">Register</a>
-            <a class="btn" href="{{ url_for('login')}}">Login</a>
 
+            <div class="navbar-responsive">
+              <a href="{{url_for('play')}}" class="navbar-responsive__link">Hunt</a>
+              <a href="{{url_for('leaderboard')}}" class="navbar-responsive__link">Leaderboard</a>
+              <a href="{{url_for('logout')}}" class="navbar-responsive__link">Logout</a>
+            </div>
+            {%else%}
+            <nav class="nav">
+              <a class="btn" href="{{ url_for('register')}}">Register</a>
+              <a class="btn" href="{{ url_for('login')}}">Login</a>
+            </nav>
             {%endif%}
 
     </nav>
 
 </head>
-<body class="text-monospace font-italic" >
+<body class="text-monospace font-italic">
+<script src="../static/nav.js"></script>
+<script src="../static/pop_up.js"></script>
+<script src="../static/whitespace.js"></script>
 
 {% block content %}
 

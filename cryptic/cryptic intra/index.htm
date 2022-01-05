@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Open+Sans:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <title>Decode | Home</title>
+</head>
+<body>
+    <nav class="nav">
+        <a href="login.htm" class="btn">Login</a>
+        <a href="register.htm" class="btn">Register</a>
+    </nav>
+    <main class="hero">
+        <div class="hero-content">
+            <div class="typewriter">
+                <div class="static-text">Decode 2021</div>
+                <ul class="dynamic-text">
+                    <li><span>Beginning soon</span></li>
+                    <li><span>8th - 9th Jan</span></li>
+                </ul>
+            </div>
+    
+            <img src="cropped logo.png" alt="logo" class="logo-main">
+            
+            <div class="cd-wrapper">
+                <p class="cd-day"></p>
+                <p class="cd-hour"></p>
+                <p class="cd-min"></p>
+                <p class="cd-sec"></p>
+            </div>
+        </div>
+    </main>    
+    <br>
+</body>
+<script>
+    const cdDate = new Date('Jan 8, 2022 00:00:00').getTime();
+
+    let cdfunc = setInterval(function() {
+        let now = new Date().getTime();
+        let limit = cdDate - now;
+        let days = Math.floor(limit / (1000 * 60 * 60 * 24));
+        let hours = Math.floor(limit % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
+        let mins = Math.floor(limit % (1000 * 60 * 60) / (1000 * 60));
+        let seconds = Math.floor(limit % (1000 * 60) / 1000);
+
+        document.querySelector('.cd-day').innerHTML = days + "d:";
+        document.querySelector('.cd-hour').innerHTML = hours + "h:";
+        document.querySelector('.cd-min').innerHTML = mins + "m:";
+        document.querySelector('.cd-sec').innerHTML = seconds + "s";
+
+        if (limit < 0) {
+            clearInterval(cdfunc);
+            document.querySelector('.cd').innerHTML = '0';
+        }
+    }, 1000)
+</script>
+</html>

@@ -103,6 +103,7 @@ def play():
 def leaderboard():
     all_users = User.query.order_by(User.question.desc(),User.answer_time.asc()).all()
     n = len(all_users)
+    print(n)
     rank = []
     for users in all_users:
         rank.append(n)

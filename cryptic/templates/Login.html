@@ -1,25 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <main class="login-hero">
+        <h1 class="heading-1">Login</h1>
+        <form method="post" class="reg-form">
+          {{form.hidden_tag()}}
+            <div class="input-wrapper">
+                <label for="uname" class="form-label">{{form.username.label}}</label>
+                {{form.username(class="form-input exceptions")}}
+            </div>
+            <div class="input-wrapper">
+                <label for="pass" class="form-label">{{form.password.label}}</label>
+                {{form.password(class="form-input exceptions")}}
+                {{mess}}
+            </div>
+            {{form.submit(class="btn")}}
+        </form>
 
-<div class="container">
-  <div class="jumbotron">
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="fade close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      {{mess}}
-    </div>
-    <form  method="post">
-      {{form.hidden_tag()}}
-      {{form.username.label}}<br>{{form.username()}}<br>
-      <small id="emailHelp" class="form-text text-muted">Play Well</small>
-      {{form.password.label}}<br>{{form.password()}}
-      {{form.submit}}
-    </form>
-
-  </div>
-
-</div>
+    </main>
 
 {% endblock %}

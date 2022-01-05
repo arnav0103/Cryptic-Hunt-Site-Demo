@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Time</th>
+      <th scope="col">User</th>
+      <th scope="col">Level</th>
+      <th scope="col">Answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%for logs in all_logs%}
+    <tr>
+      <th scope="row">{{logs.answer_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-4]}}</th>
+      <td><a href="{{url_for('profile',user_id = logs.user.id)}}">{{logs.user.username}}</a></td>
+      <td>{{logs.question}}</td>
+      <td>{{logs.answer}}</td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+{%endblock%}

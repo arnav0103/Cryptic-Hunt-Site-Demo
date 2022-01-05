@@ -1,11 +1,12 @@
 from cryptic import app,db,mongo
 from flask import render_template,redirect,url_for,request,flash,abort
 from flask_login import login_user,login_required,logout_user,current_user
-from cryptic.models import User
+from cryptic.models import User,Logs
 from cryptic.forms import LoginForm,RegistrationForm,PlayForm
-from sqlalchemy import desc
+from sqlalchemy import desc , asc
 from werkzeug.security import generate_password_hash,check_password_hash
 username =''
+from datetime import datetime
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 @app.route('/')
@@ -74,6 +75,8 @@ def register():
 @app.route('/play',methods=['GET','POST'])
 @login_required
 def play():
+    if current_user.restricted=="Yes":
+        abort(403)
     form = PlayForm()
     use=username
     question = current_user.question
@@ -83,8 +86,12 @@ def play():
     answers = form.answer.data
     if form.validate_on_submit:
         if answers is not None:
+            log = Logs(answer = answers.lower(),answer_time = datetime.now(),question = user.question,userid = current_user.id)
+            db.session.add(log)
+            db.session.commit()
             if answers.lower() == s['q_answer']:
                 user.question += 1
+                user.answer_time= datetime.now()
                 db.session.add(user)
                 db.session.commit()
                 return render_template('Correct.html')
@@ -92,8 +99,9 @@ def play():
     return render_template('play.html',form=form,use=use,question=s['question'])
 
 @app.route('/leaderboard')
+@login_required
 def leaderboard():
-    all_users = User.query.order_by(User.question.desc()).all()
+    all_users = User.query.order_by(User.question.desc(),User.answer_time.asc()).all()
     n = len(all_users)
     rank = []
     for users in all_users:
@@ -101,6 +109,50 @@ def leaderboard():
         n -= 1
     return render_template('leaderboard.html',all_users=all_users,rank=rank)
 
+@app.route('/admin_panel',methods=['GET','POST'])
+@login_required
+def admin():
+    if current_user.username != 'Xino':
+        abort(403)
+    else:
+        all_logs = Logs.query.order_by(Logs.answer_time.desc())
+        return render_template("admin_panel.htm",all_logs=all_logs)
+
+@app.route('/profile/<user_id>',methods = ['GET','POST'])
+@login_required
+def profile(user_id):
+    if current_user.username != 'Xino':
+        abort(403)
+    user = User.query.get(user_id)
+    logs = []
+    if user.logs:
+        for i in user.logs:
+            logs.append(i)
+    return render_template("profile.htm",user=user,logs=logs)
+
+@app.route('/restrict/<username>',methods = ['GET','POST'])
+@login_required
+def ban(username):
+    if current_user.username != 'Xino':
+        abort(403)
+    all = User.query.filter_by(username = username)
+    if all:
+        all[0].restricted = "Yes"
+        db.session.commit()
+        return redirect(url_for('admin'))
+    return abort(404)
+
+@app.route('/unrestrict/<username>',methods = ['GET','POST'])
+@login_required
+def unban(username):
+    if current_user.username != 'Xino':
+        abort(403)
+    all = User.query.filter_by(username = username)
+    if all:
+        all[0].restricted = "No"
+        db.session.commit()
+        return redirect(url_for('admin'))
+    return abort(404)
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+{{user.username}} : {{user.classe}}  : {{user.question}} : {{user.fname}} {{user.lname}} : {{user.email}}
+{%if user.restricted == "Yes"%}
+<a  href="{{url_for('unban',username = user.username)}}"> <button>UNBAN</button></a>
+{%else%}
+<a  href="{{url_for('ban',username = user.username)}}"> <button>BAN</button></a> 
+{%endif%}
+ <table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Time</th>
+      <th scope="col">User</th>
+      <th scope="col">Level</th>
+      <th scope="col">Answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%for log in logs%}
+    <tr>
+      <th scope="row">{{log.answer_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-4]}}</th>
+      <td>{{log.user.username}}</td>
+      <td>{{log.question}}</td>
+      <td>{{log.answer}}</td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+{%endblock%}

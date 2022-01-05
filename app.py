@@ -1,4 +1,4 @@
-from cryptic import app,db
+from cryptic import app,db,mongo
 from flask import render_template,redirect,url_for,request,flash,abort
 from flask_login import login_user,login_required,logout_user,current_user
 from cryptic.models import User
@@ -8,8 +8,6 @@ from werkzeug.security import generate_password_hash,check_password_hash
 username =''
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
-app.config["MONGO_URI"] = "mongodb+srv://Arnav:arnavgupta0103@cluster0.ntgb4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-mongo = PyMongo(app)
 @app.route('/')
 def home():
     return render_template('HomePage.html')

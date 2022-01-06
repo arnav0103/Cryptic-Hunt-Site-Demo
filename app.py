@@ -13,11 +13,6 @@ from pymongo import MongoClient
 def home():
     return render_template('HomePage.html')
 
-@app.route('/welcome')
-@login_required
-def welcome_user():
-    return render_template('login_popup.html')
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -65,6 +60,10 @@ def register():
             user = User(email,username,password,1,fname,lname, classe)
             db.session.add(user)
             db.session.commit()
+            post = {"author": "Mike",
+            "email": "My first blog post!",
+            "username": ["mongodb", "python", "pymongo"],
+            "classe": datetime.datetime.utcnow()}
             return redirect(url_for('login'))
     except :
         mess = 'username or email already been used'
@@ -101,13 +100,19 @@ def play():
 @login_required
 def leaderboard():
     all_users = User.query.order_by(User.question.desc(),User.answer_time.asc()).all()
-    n = len(all_users)
-    print(n)
     rank = []
+    all = []
+    l = 0
     for users in all_users:
+        if users.restricted == "Yes" or users.username == "Xino":
+            pass
+        else:
+            all.append(users)
+    n = len(all)
+    for i in all:
         rank.append(n)
         n -= 1
-    return render_template('leaderboard.html',all_users=all_users,rank=rank)
+    return render_template('leaderboard.html',all_users=all,rank=rank)
 
 @app.route('/admin_panel',methods=['GET','POST'])
 @login_required
@@ -118,17 +123,18 @@ def admin():
         all_logs = Logs.query.order_by(Logs.answer_time.desc())
         return render_template("admin_panel.htm",all_logs=all_logs)
 
-@app.route('/profile/<user_id>',methods = ['GET','POST'])
+@app.route('/profile/<username>',methods = ['GET','POST'])
 @login_required
 def profile(user_id):
     if current_user.username != 'Xino':
         abort(403)
-    user = User.query.get(user_id)
+    user = User.query.filter_by(username=username)
     logs = []
-    if user.logs:
-        for i in user.logs:
-            logs.append(i)
-    return render_template("profile.htm",user=user,logs=logs)
+    if user:
+        if user[0].logs:
+            for i in user[0].logs:
+                logs.append(i)
+    return render_template("profile.htm",user=user[0],logs=logs)
 
 @app.route('/restrict/<username>',methods = ['GET','POST'])
 @login_required

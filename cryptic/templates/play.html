@@ -3,7 +3,7 @@
 {%block content%}
 
 <main class="play-hero">
-  <h2 class="heading-2">Level {{use}}</h2> 
+  <h2 class="heading-2">Level {{use}}</h2>
   <form method="post">
 
     <p class="question">{{question}}</p>
@@ -11,8 +11,8 @@
     {{form.hidden_tag()}}
     <!-- {{form.answer.label}}<br> -->
     {{form.answer(class="form-input exceptions answer")}}
+    {{form.submit(class="btn")}} 
   </form>
-  {{form.submit(class="btn")}} 
   {%if mess == "wrong"%}
   <!-- write the wrong pop up -->
   {%elif mess == "correct"%}

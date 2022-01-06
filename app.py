@@ -40,7 +40,7 @@ def login():
                 current_user = user
                 next = request.args.get('next')
                 if next == None or not next[0]=='/':
-                    next = url_for('welcome_user')
+                    next = url_for('home')
                 return redirect(next)
             else:
                 mess = "Wrong Password"
@@ -82,7 +82,7 @@ def play():
     s = user_collection.find_one({'question_number':user.question})
     answers = form.answer.data
     mess = ""
-    if form.validate_on_submit:
+    if form.validate_on_submit():
         if answers is not None:
             log = Logs(answer = answers.lower(),answer_time = datetime.now(),question = user.question,userid = current_user.id)
             db.session.add(log)

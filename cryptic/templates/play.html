@@ -5,19 +5,79 @@
 <main class="play-hero">
   <h2 class="heading-2">Level {{use}}</h2>
   <form method="post">
-
+    <p hidden>{{source}}</p>
     <p class="question">{{question}}</p>
+    {%if imgur=="uv_nalla"%}
+    {%else%}
+    <a href={{imgur}} target = "_blank" style="font-size:1.69rem; color:dodgerblue">{{imgur}}</a>
+    {%endif%}
     <!-- <input type="text" class="form-input answer exceptions"></input>   -->
     {{form.hidden_tag()}}
     <!-- {{form.answer.label}}<br> -->
     {{form.answer(class="form-input exceptions answer")}}
-    {{form.submit(class="btn")}} 
+    {%if form.answer.errors%} {%for error in form.answer.errors%}
+    <small>{{error}}</small>
+    {%endfor%} {%endif%}
+    {{form.submit(class="btn")}}
   </form>
-  {%if mess == "wrong"%}
-  <!-- write the wrong pop up -->
-  {%elif mess == "correct"%}
-  <!-- write the correct pop up -->
-  {%endif%}
+  <div id="mess" data-answer="{{mess}}">{{mess}}</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log(document.getElementById('mess'));
+
+      let ans = document.getElementById('mess');
+      const answerBtn = document.querySelector('.answer-btn');
+      let answerInput = document.querySelector('.answer');
+      console.log(ans.getAttribute('data-answer'))
+
+      answerInput.addEventListener('keyup', (event) => {
+    if (event.keyCode === 13 && ans.getAttribute('data-answer') === 'wrong') {
+        event.preventDefault();
+        errorPopup();
+    } else if (event.keyCode === 13 && ans.getAttribute('data-answer') === 'correct') {
+        event.preventDefault();
+        successPopup();
+  }
+})
+
+      answerBtn.addEventListener('click', () => {
+        if (ans.getAttribute('data-answer') === 'wrong') {
+          errorPopup();
+        } else if (ans.getAttribute('data-answer') === 'correct') {
+          successPopup();
+        }
+      })
+
+      function successPopup() {
+        Swal.fire({
+          title: 'Correct answer!',
+          icon: 'success',
+          width: '40rem',
+          background: '#1f1e1e',
+          color: '#faf9f9',
+          showConfirmButton: false,
+          timer: 2000,
+          position: 'top-end',
+          timerProgressBar: true
+        })
+      }
+
+      function errorPopup() {
+        Swal.fire({
+          title: 'Wrong answer!',
+          text: 'Try again',
+          icon: 'error',
+          width: '40rem',
+          background: '#1f1e1e',
+          color: '#faf9f9',
+          showConfirmButton: false,
+          timer: 2000,
+          position: 'top-end',
+          timerProgressBar: true
+        })
+      }
+    })
+  </script>
 </main>
 
 {%endblock%}

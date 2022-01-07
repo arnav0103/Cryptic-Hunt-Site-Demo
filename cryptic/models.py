@@ -48,3 +48,16 @@ class Logs(db.Model):
         self.question = question
         self.answer_time = answer_time
         self.userid = userid
+
+class Questions(db.Model):
+    __tablename__ = 'questions'
+    id = db.Column(db.Integer , primary_key = True)
+    question = db.Column(db.String)
+    answer = db.Column(db.String)
+    source = db.Column(db.String)
+    imgur = db.Column(db.String,default = "uv_nalla")
+
+    def __init__(self,answer,question,source):
+        self.answer = answer
+        self.question = question
+        self.source = source

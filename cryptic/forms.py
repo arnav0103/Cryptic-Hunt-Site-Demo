@@ -19,6 +19,19 @@ class RegistrationForm(FlaskForm):
     pass_confirm = PasswordField('confirm password',validators=[DataRequired()])
     submit = SubmitField('Register')
 
+    def validate_email(self,field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('The email you chose has already been registered')
+    def validate_username(self,field):
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError('The username you chose has already been registered')
+        if " " in field.data or "'" in field.data or '"' in field.data:
+            raise ValidationError('No spaces or specialchars in username')
+
 class PlayForm(FlaskForm):
     answer = StringField(label='solve the question',validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+    def validate_answer(self,field):
+        if " " in field.data or "'" in field.data or '"' in field.data:
+            raise ValidationError('No spaces or specialchars in answer')

@@ -1,7 +1,7 @@
-from cryptic import app,db,mongo
+from cryptic import app,db
 from flask import render_template,redirect,url_for,request,flash,abort
 from flask_login import login_user,login_required,logout_user,current_user
-from cryptic.models import User,Logs
+from cryptic.models import User,Logs,Questions
 from cryptic.forms import LoginForm,RegistrationForm,PlayForm
 from sqlalchemy import desc , asc
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -11,6 +11,13 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 @app.route('/')
 def home():
+    # question=Questions(question = "kya yuvaan nalla hai",
+    #         answer = "yes",
+    #         source = "do u hv to think",
+    # )
+    # db.session.add(question)
+    # db.session.commit()
+    # db.session.commit()
     return render_template('HomePage.html')
 
 @app.route('/logout')
@@ -47,26 +54,18 @@ def login():
 @app.route('/register',methods=['GET','POST'])
 def register():
     mess = 'Register to play the most exciting cryptic hunts ever'
-    try:
-        form = RegistrationForm()
-        email = form.email.data
-        username = form.username.data
-        password = form.password.data
-        fname = form.fname.data
-        lname = form.lname.data
-        classe = form.classe.data
-
-        if form.validate_on_submit():
-            user = User(email,username,password,1,fname,lname, classe)
-            db.session.add(user)
-            db.session.commit()
-            post = {"author": "Mike",
-            "email": "My first blog post!",
-            "username": ["mongodb", "python", "pymongo"],
-            "classe": datetime.datetime.utcnow()}
-            return redirect(url_for('login'))
-    except :
-        mess = 'username or email already been used'
+    form = RegistrationForm()
+    email = form.email.data
+    username = form.username.data
+    password = form.password.data
+    fname = form.fname.data
+    lname = form.lname.data
+    classe = form.classe.data
+    if form.validate_on_submit():
+        user = User(email,username,password,1,fname,lname, classe)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('login'))
     return render_template('Register.html',form = form,mess=mess)
 @app.route('/play',methods=['GET','POST'])
 @login_required
@@ -74,27 +73,31 @@ def play():
     if current_user.restricted=="Yes":
         abort(403)
     form = PlayForm()
-    # use=current_user.question_number
-    question = current_user.question
-    user = User.query.get(current_user.id)
-    user_collection = mongo.db.Questions
-    s = user_collection.find_one({'question_number':user.question})
-    answers = form.answer.data
     mess = ""
+    max = Questions.query.order_by(Questions.id.desc())
+    for i in max:
+        print(i.id)
+    print(max)
+    questions = current_user.question
+    user = User.query.get(current_user.id)
+    if user.question > max[0].id:
+        return "Congratulations and celeberations! Admins gonna contact"
+    question = Questions.query.get(user.question)
+    answers = form.answer.data
     if form.validate_on_submit():
         if answers is not None:
             log = Logs(answer = answers.lower(),answer_time = datetime.now(),question = user.question,userid = current_user.id)
             db.session.add(log)
             db.session.commit()
-            if answers.lower() == s['q_answer']:
+            if answers.lower() == question.answer:
                 user.question += 1
                 user.answer_time= datetime.now()
                 db.session.add(user)
                 db.session.commit()
-                mess = "correct"
+                return redirect(url_for('play'))
             else:
                 mess = "wrong"
-    return render_template('play.html',form=form,use=question,question=s['question'],mess=mess)
+    return render_template('play.html',form=form,use=questions,question=question.question,mess=mess,source = question.source,imgur = question.imgur)
 
 @app.route('/leaderboard')
 @login_required
@@ -125,7 +128,7 @@ def admin():
 
 @app.route('/profile/<username>',methods = ['GET','POST'])
 @login_required
-def profile(user_id):
+def profile(username):
     if current_user.username != 'Xino':
         abort(403)
     user = User.query.filter_by(username=username)

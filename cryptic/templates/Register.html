@@ -16,7 +16,7 @@
 
         <main class="reg-hero">
           <h1 class="heading-1">Register</h1>
-  
+
         <form method="post" class="reg-form">
         {{form.hidden_tag()}}
         <div class="input-wrapper">
@@ -24,8 +24,7 @@
           {{form.fname(class="form-input exceptions")}}
         </div>
 
-        {%if form.fname.errors%} {%for error in
-          form.fname.errors%}
+        {%if form.fname.errors%} {%for error in form.fname.errors%}
         <small>{{error}}</small>
         {%endfor%} {%endif%}
 
@@ -34,8 +33,7 @@
           {{form.lname(class="form-input exceptions")}}
         </div>
 
-        {%if form.lname.errors%} {%for error in
-          form.lname.errors%}
+        {%if form.lname.errors%} {%for error in form.lname.errors%}
         <small>{{error}}</small>
         {%endfor%} {%endif%}
 
@@ -86,9 +84,9 @@
         <small class="last-caption">{{error}}</small>
         {%endfor%} {%endif%}
 
-        {{form.submit(class="btn")}}  
+        {{form.submit(class="btn")}}
         <!-- {{form.fname.label}}<br>{{form.fname()}}<br>
-        {{form.lname.label}}<br>{{form.lname()}}<br>  
+        {{form.lname.label}}<br>{{form.lname()}}<br>
         {{form.email.label}}<br>{{form.email()}}<br>
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         {{form.classe.label}}<br>{{form.classe()}}<br>

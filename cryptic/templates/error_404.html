@@ -1,19 +1,18 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>404 Makes bear sad</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="../static/fof.css">
 
+</head>
+<body bgcolor="#121212">
+<div id="app"></div>
 
-{% block content %}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.production.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/styled-components/3.2.1/styled-components.min.js'></script><script  src="../static/fof.js"></script>
 
-<div class="page-wrap d-flex flex-row align-items-center">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12 text-center">
-                <span class="display-1 d-block">404</span>
-                <div class="mb-4 lead">The page you are looking for was not found.</div>
-                <a href="{{ url_for('home')}}" class="btn btn-link">Back to Home</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-{% endblock %}
+</body>
+</html>
